@@ -7,45 +7,37 @@
 
 using namespace std;
 
-vector<vector<int>> input(){
-    ifstream inputFile("input/instancia1.txt");
+vector<int> input(string path){
+    ifstream inputFile(path);
 
     if (!inputFile.is_open()) {
         cout << "Error!" << endl;
         exit(1);
-        return {};
     }
 
-    std::vector<int> numbers;
-    // Read numbers from the file
+    vector<int> numbers;
     int number;
     while (inputFile >> number) {
         numbers.push_back(number);
     }
 
-    // Close the file
     inputFile.close();
 
-    // Now you have the numbers stored in the 'numbers' vector
-    // You can perform operations on the data as needed
-
-    // Print the numbers as an example
-    vector<vector<int>> data;
-    int backpackSize = numbers[1];
-    for (int i = 2; i < numbers.size(); ++i) {
-        i++;
-        data.push_back({numbers[i], numbers[i+1]});
-        i++;
-    }
-    // print formatted data
-    for (int i = 0; i < data.size(); ++i) {
-        cout << data[i][0] << "weight" << data[i][1] << "value" << endl;
-    }
-    return {};
+    return numbers;
 }
 
 int main() {
-    input();
+    vector<int> fileData = input("input/instancia1.txt");
+    
+    vector<vector<int>> data;
+    int backpackSize = fileData[1];
+    //format data filedData[1] = height, fileData[2] = value
+    for (int i = 2; i < fileData.size(); ++i) {
+        i++;
+        data.push_back({fileData[i], fileData[i+1]});
+        i++;
+    }
+
     return 0;
 }
 
