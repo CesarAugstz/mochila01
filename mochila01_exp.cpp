@@ -35,11 +35,10 @@ vector<int> input(string path){
 int backpack(int index, int bpSize) { 
     count ++;
     if (bpSize == 0) return 0;
-    if (index == /*problemData.size()*/150) return 0;
+    if (index == problemData.size()) return 0;
     if (problemData[index][0] > bpSize) return backpack(index + 1, bpSize);
     int r1 = backpack(index + 1, bpSize);
     int r2 = backpack(index + 1, bpSize - problemData[index][0]) + problemData[index][1];
-    //return max(r1, r2);
     return max(r2, r1);
 }
 
