@@ -1,13 +1,15 @@
 //max value in the bag
 
+#include <iomanip>
 #include <iostream>
 #include <vector>
 #include <fstream>
 #include <string>
 #include <cstdlib>
+#include <chrono>
 
 using namespace std;
-int count = 0;
+long long int count = 0;
 vector<vector<int>> problemData;
 
 int max(int a, int b) { return (a > b) ? a : b; }
@@ -31,10 +33,9 @@ vector<int> input(string path){
 }
 
 int backpack(int index, int bpSize) { 
-    cout << "index: " << index << " bpSize: " << bpSize << endl;
     count ++;
     if (bpSize == 0) return 0;
-    if (index == (sizeof problemData / sizeof problemData[0] )) return 0;
+    if (index == /*problemData.size()*/150) return 0;
     if (problemData[index][0] > bpSize) return backpack(index + 1, bpSize);
     int r1 = backpack(index + 1, bpSize);
     int r2 = backpack(index + 1, bpSize - problemData[index][0]) + problemData[index][1];
@@ -42,21 +43,34 @@ int backpack(int index, int bpSize) {
     return max(r2, r1);
 }
 
+double timeExec(chrono::high_resolution_clock::time_point *start){
+   ios_base::sync_with_stdio(false);
+   auto end = chrono::high_resolution_clock::now();
+   return chrono::duration_cast<chrono::nanoseconds>(end - *start).count() * 1e-9;
+}
 
 int main() {
-    
-    vector<int> fileData = input("input/instancia1.txt");
 
+    auto mainStart = chrono::high_resolution_clock::now();
+    
+    auto start = chrono::high_resolution_clock::now();
+    vector<int> fileData = input("input/instancia1.txt");
+    cout << "time to read file: " << timeExec(&start) << " sec"<< endl;
+
+    start = chrono::high_resolution_clock::now();
     int backpackSize = fileData[1];
-    //format data filedData[1] = height, fileData[2] = value
+    //problemData = weight, value
     for (int i = 2; i < fileData.size(); ++i) {
         i++;
         problemData.push_back({fileData[i], fileData[i+1]});
-        //cout << "height: " << fileData[i] << " value: " << fileData[i+1] << endl;
         i++;
     }
+    cout << "time to process data: " << timeExec(&start) << " sec"<< endl;
 
+    start = chrono::high_resolution_clock::now();
     int result =  backpack(0, backpackSize);
+    cout << "time to execute: " << timeExec(&start) << " sec"<< endl;
+    cout << "time to execute all: " << timeExec(&mainStart) << " sec"<< endl;
     cout << "result: " << result << " times in function:" << count << endl; 
     return 0;
 }
